@@ -109,3 +109,4 @@ Optional source passage I intended to cite:
 
 Previous audit result, if applicable:
 ```
+PDF files are not required for the initial audit. Upload them only when the AI cannot access or verify the full text.

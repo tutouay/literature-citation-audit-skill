@@ -6,6 +6,15 @@
 
 A reusable skill for checking whether academic references actually support the claims assigned to them.
 
+## Quick Start
+
+1. Choose `SKILL.md` or `SKILL.zh-CN.md`.
+2. Add the selected file to your AI tool's instruction or skill environment.
+3. Fill in `INPUT_TEMPLATE.md` or `INPUT_TEMPLATE.zh-CN.md`.
+4. Send the completed form to the AI.
+5. The AI will search for and verify the cited sources first.
+6. Upload a PDF only when the AI cannot access or verify the full text.
+
 Version 6.1 supports adaptive language output and user-selected citation styles.
 
 - English material with English output uses no translation section and a four-column evidence table.
@@ -28,6 +37,15 @@ The two skill files contain equivalent audit logic. Install one language version
 ## 中文
 
 用于核查学术文献是否真实存在，以及文献原文能否支持当前引文位置承担的具体命题。
+
+## 迅速开始
+
+1. 选择 `SKILL.md` 或者 `SKILL.zh-CN.md`。
+2. 将选定的文件添加到您的AI/Agent工具的指令或技能环境中。
+3. 请输入`INPUT_TEMPLATE.md` 或者 `INPUT_TEMPLATE.zh-CN.md`。
+4. 将填写完整的表格发送给AI/Agent。
+5. AI/Agent将首先搜索并验证引用的来源。
+6. 仅在AI/Agent无法访问或验证全文时为AI提供PDF格式的文献资料。
 
 v6.1 支持动态语言输出和用户自定义参考文献格式。
 

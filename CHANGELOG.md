@@ -1,16 +1,45 @@
-# 更新记录
+# Changelog
 
-## v4
+## v6.1
 
-1. 增加完整核查、单篇文献核查和 PDF 补充核查三种模式。
-2. 贴合率改为对应当前引文位置承担的具体命题。
-3. 增加直接证据、间接证据、理论基础和本研究解释四类关系。
-4. 加强文献综述句的来源归属检查和原始来源追溯。
-5. 全文不可获得时禁止给出百分比贴合率。
-6. 增加原句上下文属性核验。
-7. 参考文献信息增加已核验、存在错误和暂无法确认三种状态。
-8. 细化 DOI 核验规则。
-9. 增加引用技术完整性要求。
-10. 增加输出前禁止改写检查。
-11. 措辞强度只说明证据边界，不提供替代句。
-12. 增加本研究结果、外部理论基础和作者解释的区分规则。
+### English
+
+1. Added citation style or reference-format selection to the required user intake.
+2. Removed APA as the default formatting standard.
+3. Added APA 7, Chicago, Harvard, IEEE, Vancouver, journal-specific, custom, and metadata-only options.
+4. Metadata-only mode checks bibliographic accuracy without treating style differences as errors.
+5. Updated both input templates and ready-to-send forms.
+6. Clarified that the sample reference entry is an information example, not a required style.
+
+### 中文
+
+1. 将参考文献格式选择加入用户必须确认的内容。
+2. 取消默认按照 APA 检查格式。
+3. 增加 APA 7、Chicago、Harvard、IEEE、Vancouver、目标期刊、自定义格式和仅核对信息等选项。
+4. “只核对文献信息”模式不将标点和排版差异视为错误。
+5. 更新中英文填写模板和可复制表单。
+6. 明确示例参考文献只展示可提供的信息，不代表指定格式。
+
+## v6
+
+### English
+
+1. Added a required output-language check before the first audit.
+2. Added conditional translation logic.
+3. Added a four-column table for audits that require no translation.
+4. Retained the five-column table when source passages require translation.
+5. Required all headings and audit commentary to use the selected output language.
+6. Added a user intake form explaining required, recommended, and optional materials.
+7. Allowed audits to proceed when complete bibliography entries are unavailable, using whatever identifying information the user can provide.
+8. Added an optional field for the source passage the user intended to cite.
+
+### 中文
+
+1. 首次核查前增加输出语言确认。
+2. 增加按需翻译规则。
+3. 不需要翻译时使用四列表格。
+4. 文献原句需要翻译时保留五列表格。
+5. 标题和全部核查内容使用用户选择的语言。
+6. 新增用户材料填写模板，说明必须、建议和可选材料。
+7. 用户没有完整参考文献条目时，可以根据现有识别信息继续。
+8. 增加“用户原本想引用的文献原句或段落”可选字段。

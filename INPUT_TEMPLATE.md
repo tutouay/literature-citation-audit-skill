@@ -1,37 +1,111 @@
-# 文献引用核查输入模板
+# Literature Citation Audit User Intake
 
-请按照文献引用核查 Skill 处理以下内容。
+Please confirm the following information before the audit begins.
 
-## 核查范围
+## 1. Output language
 
-[完整核查 / 只核查某一篇文献 / 根据补充 PDF 更新此前结果]
+Choose one:
 
-## 待核查段落或目标句
+- English
+- Chinese
+- Korean
+- Japanese
+- Other: [write the language]
 
-[粘贴英文段落或目标句]
+When the audited text and source quotations are already in the selected language, no translation will be added. When they are in another language, they will be translated into the selected language.
 
-## 参考文献
+## 2. Citation style or reference format
 
-[粘贴参考文献条目]
+Choose one:
 
-## 可选材料
+- APA 7
+- Chicago
+- Harvard
+- IEEE
+- Vancouver
+- Journal-specific style: [write the journal or paste its instructions]
+- Institutional or custom style: [write the requirement]
+- Metadata check only, without formatting review
+- Other: [write the requirement]
 
-[上传论文 PDF、补充材料、访谈原文或结果表]
+When “metadata check only” is selected, the audit checks the title, authors, author order, year, publication venue, volume, issue, pages or article number, DOI, and links. Differences in punctuation or layout will not be treated as errors.
 
-## 固定要求
+## 3. Audit scope
 
-1. 先保留原句并完整翻译。
-2. 再建立五列表格。
-3. 文献原句优先从全文中查找。
-4. 同一篇文献可以摘录多条原句。
-5. 论证性观点优先从结果、讨论、结论或理论提出部分查找。
-6. 使用文献综述或背景部分的句子时，核对前后文和来源归属，必要时追溯原始来源。
-7. 先拆分目标句中的具体命题，再判断文献分别支持哪些环节。
-8. 区分直接证据、间接证据、理论基础和本研究解释。
-9. 原句列只能放可检索的原文，不放分析。
-10. 找不到全文时直接标明，等待我上传 PDF 后补查，不给出百分比贴合率。
-11. 表格之后只写实际存在的问题。
-12. 参考文献信息完全正确时不要重复输出。
-13. DOI 必须核对解析后的题名、作者、年份和出版来源。
-14. 只核查，不修改句子。除非我明确要求，否则禁止提供修改稿、优化版本或替代句子。
-15. 补传 PDF 时只更新受影响的内容，不重复全部结果。
+Choose one:
+
+- Full audit of the paragraph and all cited references
+- Audit one reference only
+- Update a previous audit using an uploaded PDF
+
+## 4. Target paragraph or sentence
+
+Paste the exact text, including in-text citations.
+
+Example:
+
+```text
+[Your paragraph here] (Author A, 2020; Author B & Author C, 2022).
+```
+
+## 5. Reference entries
+
+Paste the complete reference entries when available.
+
+The following entry is only an example of the information that can be supplied. Its formatting does not determine the style selected above.
+
+```text
+Abdallah, A., Ahmad, A., & Said, B. (2025). Balancing privacy and usability: A design science research approach for cookie consent mechanisms. Journal of Open Innovation: Technology, Market, and Complexity, 11(2), 100520. https://doi.org/10.1016/j.joitmc.2025.100520
+```
+
+If you do not have a complete reference entry, provide anything you have:
+
+- Title
+- Author or author-year citation
+- DOI
+- URL
+- Journal or conference name
+
+You may write:
+
+```text
+I do not have the full reference information. Please identify it from the in-text citation if possible.
+```
+
+## 6. Optional material that improves accuracy
+
+Provide any of the following when available:
+
+- PDF files
+- Full-text links
+- The exact sentence or passage from the cited work that you believe supports your claim
+- A previous audit result for PDF follow-up
+
+Example:
+
+```text
+Passage I intended to cite:
+"[Paste the source sentence or paragraph here.]"
+```
+
+The supplied passage helps locate the relevant context. It will still be checked against the source itself.
+
+## Ready-to-send form
+
+```text
+Output language:
+
+Citation style or reference format:
+
+Audit scope:
+
+Target paragraph or sentence:
+
+Reference entries:
+
+Optional PDFs or links:
+
+Optional source passage I intended to cite:
+
+Previous audit result, if applicable:
+```

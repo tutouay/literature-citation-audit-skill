@@ -6,7 +6,7 @@
 
 A reusable skill for checking whether academic references actually support the claims assigned to them.
 
-Version 6 uses adaptive language output. The skill asks the user to select an output language before the first audit.
+Version 6.1 supports adaptive language output and user-selected citation styles.
 
 - English material with English output uses no translation section and a four-column evidence table.
 - Material in another language is translated into the selected output language.
@@ -29,7 +29,7 @@ The two skill files contain equivalent audit logic. Install one language version
 
 用于核查学术文献是否真实存在，以及文献原文能否支持当前引文位置承担的具体命题。
 
-v6 根据用户选择动态确定语言和表格结构。
+v6.1 支持动态语言输出和用户自定义参考文献格式。
 
 - 英语材料使用英语输出时，不设置翻译部分，核查表使用四列。
 - 材料语言与输出语言不同时，翻译成用户选择的语言。

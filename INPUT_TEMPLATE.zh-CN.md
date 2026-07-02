@@ -87,6 +87,7 @@ Abdallah, A., Ahmad, A., & Said, B. (2025). Balancing privacy and usability: A d
 我原本想引用的文献内容：
 “请在这里粘贴文献中的原句或段落。”
 ```
+首次核查不要求上传 PDF。只有 AI 无法获取或核验全文时，才需要补充上传。
 
 该内容可以帮助定位相关上下文，最终仍会重新核对文献全文。
 

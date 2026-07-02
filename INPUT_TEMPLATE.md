@@ -1,6 +1,6 @@
 # Literature Citation Audit User Intake
 
-Please confirm the following information before the audit begins.
+Please provide the following information.
 
 ## 1. Output language
 
@@ -11,8 +11,6 @@ Choose one:
 - Korean
 - Japanese
 - Other: [write the language]
-
-When the audited text and source quotations are already in the selected language, no translation will be added. When they are in another language, they will be translated into the selected language.
 
 ## 2. Citation style or reference format
 
@@ -28,68 +26,32 @@ Choose one:
 - Metadata check only, without formatting review
 - Other: [write the requirement]
 
-When “metadata check only” is selected, the audit checks the title, authors, author order, year, publication venue, volume, issue, pages or article number, DOI, and links. Differences in punctuation or layout will not be treated as errors.
+## 3. Target paragraph, passage, or section
 
-## 3. Audit scope
+Paste the exact text and retain all in-text citations.
 
-Choose one:
+A submitted paragraph or passage is audited in full by default. You do not need to choose an audit scope.
 
-- Full audit of the paragraph and all cited references
-- Audit one reference only
-- Update a previous audit using an uploaded PDF
+## 4. Reference information, optional
 
-## 4. Target paragraph or sentence
+Complete reference entries are helpful but not required.
 
-Paste the exact text, including in-text citations.
+When you provide only in-text citations, the AI should search for and identify the cited works independently.
 
-Example:
+You may optionally add:
 
-```text
-[Your paragraph here] (Author A, 2020; Author B & Author C, 2022).
-```
-
-## 5. Reference entries
-
-Paste the complete reference entries when available.
-
-The following entry is only an example of the information that can be supplied. Its formatting does not determine the style selected above.
-
-```text
-Abdallah, A., Ahmad, A., & Said, B. (2025). Balancing privacy and usability: A design science research approach for cookie consent mechanisms. Journal of Open Innovation: Technology, Market, and Complexity, 11(2), 100520. https://doi.org/10.1016/j.joitmc.2025.100520
-```
-
-If you do not have a complete reference entry, provide anything you have:
-
-- Title
-- Author or author-year citation
+- Complete reference entries
+- Titles
 - DOI
-- URL
-- Journal or conference name
+- URLs
+- Journal or conference names
+- A source passage you intended to cite
 
-You may write:
+## PDF follow-up
 
-```text
-I do not have the full reference information. Please identify it from the in-text citation if possible.
-```
+Do not upload PDFs for the initial audit.
 
-## 6. Optional material that improves accuracy
-
-Provide any of the following when available:
-
-- PDF files
-- Full-text links
-- The exact sentence or passage from the cited work that you believe supports your claim
-- A previous audit result for PDF follow-up
-
-Example:
-
-```text
-Passage I intended to cite:
-"[Paste the source sentence or paragraph here.]"
-```
-PDF files are not required for the initial audit. Upload them only when the AI cannot access or verify the full text.
-
-The supplied passage helps locate the relevant context. It will still be checked against the source itself.
+The AI should search first. Upload a PDF only when the AI cannot access or verify the full text, or when you explicitly want a focused audit of one source.
 
 ## Ready-to-send form
 
@@ -98,15 +60,9 @@ Output language:
 
 Citation style or reference format:
 
-Audit scope:
+Target paragraph, passage, or section:
 
-Target paragraph or sentence:
-
-Reference entries:
-
-Optional PDFs or links:
+Optional reference information:
 
 Optional source passage I intended to cite:
-
-Previous audit result, if applicable:
 ```

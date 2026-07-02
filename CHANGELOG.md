@@ -1,5 +1,27 @@
 # Changelog
 
+## v6.2
+
+### English
+
+1. Made full audit mode the automatic default for submitted paragraphs and passages.
+2. Removed the requirement to ask users to confirm audit scope.
+3. Made complete reference entries optional.
+4. Required the AI to identify cited works independently from in-text author-year citations.
+5. Limited single-reference mode to explicit one-source requests or focused single-PDF verification.
+6. Required follow-up questions only when a citation remains genuinely ambiguous after searching.
+7. Simplified the user intake templates.
+
+### 中文
+
+1. 用户提交段落或连续文本后，自动进入完整核查模式。
+2. 取消要求用户再次确认核查范围。
+3. 完整参考文献条目改为可选信息。
+4. 要求 AI 根据文内作者年份引用独立识别并检索文献。
+5. 单篇文献核查仅用于明确的单篇要求或单独 PDF 集中核查。
+6. 只有合理检索后仍存在真实歧义时才向用户追问。
+7. 简化中英文材料填写模板。
+
 ## v6.1
 
 ### English

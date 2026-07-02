@@ -1,295 +1,182 @@
 ---
 name: literature-citation-audit
-description: Audits whether academic citations are real, accurate, and aligned with the claims they support. Adapts the output language and translation structure to the user's preference, verifies full-text quotations, evaluates claim-level evidence, checks alignment, and validates reference metadata. The default task is verification only, with no rewriting.
+version: 7.3
+description: Audits whether academic citations are real, accurate, and able to support the exact claims assigned to them. Defaults to a full audit, identifies references from in-text citations, retrieves full text, reports only real issues, and never rewrites the user's prose unless explicitly requested.
 ---
 
-# Literature Citation Audit Skill
+# Literature Citation Audit Skill v7.3
 
-## Purpose
+## Core objective
 
-Audit academic paragraphs, target sentences, and references supplied by the user. Confirm the following points.
+Audit citations in a paragraph, passage, or section supplied by the user.
 
-1. Whether each cited work actually exists.
-2. Whether the source text supports the specific claim assigned to the citation at its current location.
-3. Whether external evidence, findings from the current study, and the author's interpretation are clearly distinguished.
-4. Whether the citation logic, causal strength, and conceptual scope are accurate.
-5. Whether the reference metadata is ready for direct use in an academic reference list.
+The audit must:
 
-This task is for verification by default. Do not rewrite, polish, restructure, or provide replacement sentences unless the user explicitly asks for revision.
+1. Identify real works from in-text author-year citations.
+2. Retrieve verifiable full text.
+3. Extract verbatim passages that support the claim at the current citation location.
+4. inspect the surrounding context of each passage.
+5. Determine which specific claims the source supports.
+6. Verify authors, author order, year, title, venue, volume, issue, pages or article number, DOI, and the citation style selected by the user.
+7. When complete reference entries are absent, reconstruct usable bibliographic information in the first table column and include a DOI link or an official link that opens the corresponding work.
+8. Report only actual problems.
+8. Never rewrite the user's prose unless explicitly requested.
 
-## Language setup and user intake
+## Initial input
 
-Before the first audit, determine the user's required output language.
-
-1. If the user explicitly names an output language, use it.
-2. If the user has not named one, ask one concise question:
-   "What language should I use for the audit output?"
-3. In the same message, provide the user intake template so the user knows what material to submit.
-4. Wait for the user to confirm the language and provide the material before beginning the audit.
-5. If the user has already supplied both the language requirement and enough material, begin directly and do not ask again.
-6. Use the selected output language for all headings, table analysis, audit issues, metadata issues, and explanatory text.
-
-### Translation decision
-
-Translation is conditional.
-
-1. If the user's target text and the quoted source passages are already in the selected output language, omit translation.
-2. When translation is unnecessary, omit both the separate translation section and the translation column in the evidence table.
-3. If the target text or source passages are in a different language, translate them into the selected output language.
-4. When the material is mixed-language, translate only the parts that differ from the selected output language.
-5. Include a translation column only when at least one quoted source passage requires translation.
-6. If the selected output language is English and all audited material is already in English, use English throughout and provide no translation section or translation column.
-7. If the selected output language is Chinese, Korean, Japanese, or another language, translate all material that is not already in that language and conduct the audit in the selected language.
-
-### Material requested from the user
-
-Ask the user to provide the following.
-
-Required:
+The user must provide:
 
 1. Output language.
-2. Citation style or reference-format requirement, such as APA 7, Chicago, Harvard, IEEE, Vancouver, a journal-specific style, a custom institutional style, or "metadata check only."
-3. The exact paragraph, passage, or section to be audited, including all in-text citations.
+2. Citation style, or "metadata check only."
+3. Target text containing in-text citations.
 
-The audit scope is inferred automatically.
+Complete reference entries, titles, DOI values, links, and PDFs are optional.
 
-- A submitted paragraph, passage, or section enters full audit mode by default.
-- Single-reference mode is used only when the user explicitly requests it or uploads one PDF for focused verification of that source.
-- PDF supplementary mode is used when a PDF is supplied after an earlier audit or when the user asks to update an earlier result.
+When the user provides only citations such as:
 
-Full reference entries are optional.
+```text
+(Culnan & Armstrong, 1999; Dinev & Hart, 2006)
+```
 
-When the user provides only in-text citations such as "(Culnan & Armstrong, 1999; Dinev & Hart, 2006)," independently identify and locate the cited works using the available author names, years, surrounding claims, DOI records, publisher pages, databases, and full-text sources.
+identify and search for the works independently.
 
-Do not require the user to provide complete reference entries before starting.
+Do not require complete bibliography entries before starting.
 
-If several works share the same author-year pattern or the citation cannot be identified reliably, report the ambiguity and request only the minimum additional detail needed.
+When output language or citation style is missing, ask once:
 
-Optional but useful:
+```text
+Please confirm the output language and citation style. You may also choose "metadata check only."
+```
 
-1. Any reference information the user already has, such as a title, DOI, URL, journal, conference, or full reference entry.
-2. The exact sentence or passage from the cited source that the user believes supports the claim. This helps locate the relevant context but does not replace independent verification.
-3. A previous audit result when the task is a PDF follow-up.
+Do not ask the user to confirm the audit scope.
 
-Do not request a PDF for the initial audit. Search first. Request a PDF only when the full text cannot be accessed or verified.
+## Mode selection
 
-## Audit modes
-
-Select the mode automatically from the material the user provides.
-
-### Full audit mode
+### Full audit
 
 This is the default mode.
 
-Use it whenever the user submits a paragraph, passage, or section containing one or more in-text citations, even when no full reference entries are provided.
+A paragraph, passage, or section automatically triggers an audit of all in-text citations.
 
-Do not ask the user to confirm the audit scope in this situation.
+### Single-reference audit
 
-Output in this order.
+Use only when:
 
-1. Original text
-2. Translation, only when required by the selected output language
-3. Literature evidence table, using the four-column or five-column layout as appropriate
-4. Audit issues, including only actual problems
-5. Reference metadata issues, including only errors or items that remain unverified
+1. The user explicitly requests one source.
+2. The user uploads one PDF and explicitly requests focused verification of that source.
 
-### Single-reference audit mode
+A passage with only one citation still uses full audit mode.
 
-Use this mode only when the user explicitly asks to check one source, one citation, or one specific reference, or when the user uploads a single PDF specifically for focused verification of that source.
+### PDF follow-up audit
 
-Do not switch to this mode merely because the paragraph contains only one citation.
+When the user uploads a PDF after an earlier audit, update only items previously unavailable, unscored, or in need of correction.
 
-Requirements:
+Do not repeat unchanged content.
 
-1. Retain only the target sentence associated with that reference. Translate it only when it differs from the selected output language.
-2. Include only the target reference in the table.
-3. Evaluate only the specific claim that the reference is expected to support at its current citation location.
-4. Do not recheck other references in the same paragraph that have already been confirmed.
-5. Report only problems concerning the target reference.
+## Mandatory workflow
 
-### PDF supplementary audit mode
+### Step 1 Parse the passage
 
-Use this mode when the user uploads a PDF after an initial audit or asks to update an earlier result.
+1. Preserve the user's original text.
+2. Extract every in-text citation.
+3. Split each cited sentence into specific claims.
+4. Determine the claim assigned to each source at its current location.
+5. Distinguish external evidence, findings from the current study, and author interpretation.
 
-Requirements:
+### Step 2 Identify the source
 
-1. Update only items previously marked as unavailable, unverified, unscored, or in need of correction.
-2. Add verifiable quotations, page numbers, contextual classification, alignment scores, and corrected metadata.
-3. Do not repeat the full paragraph, all references, or unchanged findings.
-4. If the PDF changes an earlier judgment, state what changed and identify the supporting evidence.
-5. Recheck the source using the actual PDF content. Do not preserve conclusions that were previously based on incomplete evidence.
+When complete entries are missing:
 
-## Original text and conditional translation
+1. Search by author surname, year, and surrounding topic.
+2. Compare candidate titles, author groups, years, and research objects.
+3. Confirm identity through a publisher page, DOI record, journal site, or conference site.
+4. When author-year ambiguity remains, ask only for the minimum detail needed.
+5. Continue auditing confidently identified works instead of stopping the entire task.
 
-### Original text
+### Step 3 Retrieve full text
 
-Reproduce the user's target paragraph or sentence exactly. Only repair obvious line-break artifacts caused by copying. Do not rewrite the wording.
+Any judgment such as "supports," "suitable," "direct evidence," or a percentage score requires verifiable full text.
 
-### Translation, when required
+Attempt at least:
 
-Include this section only when the target text is not already in the selected output language.
+1. Publisher HTML.
+2. Publisher PDF.
+3. Full-text links from the DOI landing page.
+4. Exact-title web search.
+5. Exact-title plus PDF search.
+6. Author page or institutional repository.
+7. One scholarly or open-access discovery service, such as Google Scholar, Semantic Scholar, CORE, OpenAlex, or Unpaywall.
+8. DOI search for an accepted manuscript, author manuscript, or preprint.
 
-Requirements:
+Failure to open the publisher page does not mean the full text is unavailable.
 
-1. Preserve the original logical relations, degree of certainty, and causal strength.
-2. Use established terminology from the relevant discipline.
-3. Do not insert interpretation, criticism, or corrections into the translation.
-4. Translate quotations faithfully without strengthening or weakening them.
-5. Do not silently repair logical problems in the original sentence.
-6. Translate into the output language confirmed by the user.
-7. Omit this section entirely when the target text is already in that language.
+If an alternative full text is accessible, the audit is incomplete until that version has been checked.
 
-## Literature evidence table
+### Minimum retrieval in constrained environments
 
-Choose the table layout according to the language rule.
+When only basic web search is available, complete at least:
 
-### Layout without translation
+1. One author-year-topic search.
+2. One title or DOI verification.
+3. One exact-title plus PDF search.
 
-Use this four-column layout when all quoted source passages are already in the selected output language.
+When no web search is available, do not audit from memory. Output only:
 
-| Reference title and authors | Verbatim source passages | Claims supported and relevance to the current study | Overall alignment score |
-|---|---|---|---|
+```text
+This environment cannot perform web retrieval, so a verifiable citation audit cannot be completed.
+```
 
-### Layout with translation
+### Step 4 Verify source evidence
 
-Use this five-column layout when at least one quoted source passage is not in the selected output language.
+Rename the second table column "Source evidence."
 
-| Reference title and authors | Verbatim source passages | Translation into the selected output language | Claims supported and relevance to the current study | Overall alignment score |
-|---|---|---|---|---|
+Three evidence forms are allowed.
 
-### First column
+#### Verbatim evidence
 
-Provide the full title, authors, and year.
+When directly relevant sentences are available, provide one or more verbatim full-text passages.
 
-Example:
+Rules:
 
-*Article Title*, Author A, Author B, & Author C, 2020
+1. For argumentative claims, prioritize results, discussion, conclusion, or theory-development sections.
+2. Multiple passages may be quoted from one source.
+3. Provide printed page numbers or sections whenever possible.
+4. For long passages, retain the beginning and ending with an ellipsis from the same continuous context.
+5. Do not combine fragments from different locations.
+6. Do not use search snippets, database descriptions, secondary summaries, or model paraphrases.
+7. For literature review or background passages, inspect the surrounding context and attribution.
+8. When a paper summarizes, restates, or organizes prior work, classify that material as secondary review evidence rather than the paper's own direct empirical evidence.
+9. For a central theoretical claim, key causal mechanism, or important definition, prioritize retrieval and verification of the original source.
+10. A review paper may support how a field summarizes a position, but do not state that the paper independently verified every conclusion it reviews.
+11. When a sentence is attributed to another work, trace the original source whenever possible.
+12. Do not treat hypotheses, research questions, isolated participant quotations, untested speculation, or another author's claim as a confirmed conclusion.
 
-### Second column
+#### Full-text synthesis
 
-Include only verbatim passages that can be located in the source itself.
-
-Follow all rules below.
-
-1. Prioritize the full text. Do not rely only on the abstract.
-2. Preserve the exact wording. Do not paraphrase, summarize, or add commentary.
-3. A single source may include multiple quotations when several passages jointly support the target claim.
-4. Keep each quotation semantically intact and provide its page number or section whenever possible.
-5. For argumentative claims, prioritize the results, discussion, conclusion, or the section where the theory is formally developed.
-6. When using a sentence from the literature review, background, or theoretical overview, inspect the surrounding context.
-7. Confirm that the statement is accepted, adopted, synthesized, or explicitly advanced by the authors.
-8. If the sentence is explicitly attributed to another source, trace and audit the original source whenever possible.
-9. Treat the current paper as the main supporting source only when it synthesizes, extends, or explicitly adopts the idea as part of its own framework.
-10. Do not treat a passage as an established author conclusion when it merely summarizes prior research, presents a dispute, introduces an opposing view, states a research question, states a hypothesis, or raises an untested possibility.
-11. Participant quotations may illustrate a reported finding, but one participant statement cannot independently represent the author's overall conclusion.
-12. Do not use search snippets, database descriptions, summaries written by other papers, or model-generated text as source quotations.
-13. When a passage is too long, retain the beginning and ending with an ellipsis. Both parts must come from the same continuous context, and the omission must not change the meaning.
-14. Do not combine fragments from different locations into a single apparent quotation.
-15. Page numbers must come from the PDF or the page numbering printed in the article.
-16. When PDF sequence numbers and printed page numbers differ, prefer the printed page number and add the PDF page number only when useful.
-17. If the full text is unavailable, write:
-   "No verifiable full text is currently available, so a full-text quotation cannot yet be provided. Please upload the PDF for supplementary verification."
-18. If the full text is available but no passage directly supports the target claim, write:
-   "No passage directly supporting this claim was found in the full text."
-19. Do not place phrases such as "the authors argue," "the study shows," or "this indicates" in this column.
-
-### Translation column, when used
-
-Add this column only when at least one source passage differs from the selected output language.
+Use full-text synthesis only when the judgment depends on the combined theoretical framework, research design, several results, and discussion sections, and no single sentence can fully express the conclusion.
 
 Requirements:
 
-1. Maintain a one-to-one correspondence with the quoted passages.
-2. Do not add interpretation.
-3. Preserve ellipses when the source column uses them.
-4. Preserve the evidential strength of the original wording.
-5. Translate into the output language confirmed by the user.
-6. For mixed-language evidence, mark passages already in the output language as "No translation needed" or leave the corresponding cell segment unchanged.
+1. The relevant full-text sections were actually read.
+2. Label the entry "Full-text synthesis."
+3. State the sections or page ranges checked.
+4. Add one to three of the most relevant quotations when possible.
+5. Do not write only "full text" or "full."
+6. Do not use full-text synthesis to avoid quotation retrieval.
 
-### Fourth column
+#### No supporting evidence found
 
-Assess the specific claim assigned to the reference at its current citation location.
+After checking the full text, when no evidence supports the target claim, write:
 
-When the target sentence contains several propositions or a causal chain, split it into separate claims before judging support.
+```text
+No evidence supporting the target claim was found in the full text. This source is unsuitable at the current citation location.
+```
 
-Use the following structure when relevant.
+Do not force an unrelated quotation into the table.
 
-1. Claims directly supported
-2. Claims indirectly supported
-3. Parts for which the source provides only theoretical or technical grounding
-4. Claims not supported
-5. Parts supported by findings from the current study
-6. Parts that remain the author's interpretation of the current study
+When full text is unavailable, do not label the source unsuitable. Mark it unscored.
 
-Classify the evidence relationship using the following four categories.
-
-#### Direct evidence
-
-The source explicitly states the target claim. The population, concept, direction of the relationship, and evidential strength are consistent with the cited sentence.
-
-#### Indirect evidence
-
-The study findings can reasonably support the target claim, but the source does not use the same formulation, or the claim requires a limited inference.
-
-#### Theoretical foundation
-
-The source supplies a concept, mechanism, or technical basis. The user still derives the present conclusion from the user's own findings.
-
-#### Current-study interpretation
-
-This part must be supported by the user's own experiment, interviews, statistical analysis, or coding. External literature may provide an interpretive framework.
-
-Check all of the following.
-
-1. Whether one concept has been substituted for another.
-2. Whether the population or research object has been broadened.
-3. Whether an association has been written as causation.
-4. Whether a specific emotion has been generalized to all negative emotions.
-5. Whether a coping strategy has been expanded into a claim about behavioral intensity or extremity.
-6. Whether a theory is applied beyond its original scope.
-7. Whether a finding from the user's study has been incorrectly attributed to an external source.
-8. Whether consistency with a theory has been written as proof by that theory.
-9. Whether support for one link in a causal chain has been treated as support for the entire chain.
-
-### Fifth column
-
-The alignment score must correspond to the specific claim assigned to the reference at its current citation location. Do not score the general thematic similarity of the whole paragraph.
-
-If the target sentence contains multiple propositions, split them first and then calculate the overall score for the citation's actual role.
-
-Use the following guide.
-
-1. 90% to 100%
-   The source directly supports the central claim. The concepts, population, direction, and evidential strength are substantially consistent.
-
-2. 75% to 89%
-   The source generally supports the central claim, with minor conceptual expansion, population differences, or wording differences.
-
-3. 50% to 74%
-   The source supports only part of the claim or requires a noticeable inference. There is a clear expansion of scope, concept substitution, or causal strengthening.
-
-4. 25% to 49%
-   The source provides only theoretical or technical grounding and does not directly support the main claim assigned to the citation.
-
-5. 0% to 24%
-   The source is largely mismatched with the target claim, or no supporting evidence can be found in the full text.
-
-Additional rules:
-
-1. Calculate the score according to the claim assigned to the citation at its current location.
-2. Do not raise the score merely because the topic is related.
-3. Do not lower the score merely to appear strict.
-4. Do not provide a percentage when no verifiable full text is available.
-5. An abstract may confirm the research topic, population, and results explicitly reported in the abstract.
-6. An abstract cannot confirm a detailed theoretical proposition, mechanism, or degree of wording used only in the body text.
-7. When the full text is unavailable, write "Not scored pending full-text verification."
-8. When only the title is available, write "Topic appears relevant; full text still requires verification."
-
-## Context classification of quotations
-
-For every quotation, identify its contextual status during the internal audit.
-
-Available classifications:
+Internally classify each evidence item as:
 
 1. Author conclusion
 2. Empirical result
@@ -297,277 +184,278 @@ Available classifications:
 4. Research hypothesis
 5. Research question
 6. Participant quotation
-7. Summary of prior research
+7. Summary of prior work
 8. Untested speculation
 
-Do not place this classification in the verbatim quotation column.
+Explain the classification in the support column only when it affects evidential value.
 
-When the classification affects evidential value, explain it briefly in the fourth column.
+The "Source evidence" column may contain only:
 
-Do not treat a hypothesis, research question, isolated participant statement, another author's claim, or untested speculation as a confirmed conclusion of the current source.
+1. Verbatim passages with pages or sections.
+2. Clearly labeled full-text synthesis with the checked scope.
+3. A conclusion that no supporting evidence was found after full-text review.
 
-## Findings from the user's own study
+Evidence type, population or context differences, support boundaries, secondary-source status, and suitability judgments belong in the support-and-relevance column. Do not mix them into the source-evidence column.
 
-When the target paragraph interprets the user's experiment, interviews, or statistical results, distinguish the following.
+### Step 5 Evidence gate
 
-1. Facts supported by the current study.
-2. Mechanisms for which external literature provides theoretical grounding.
-3. Connections that remain the author's interpretation.
-4. New findings that constitute the contribution of the current study.
+Each source must satisfy one of the following before it can enter the final table:
 
-Do not require external literature to reproduce the user's new finding in full.
+1. Verifiable full text is available, with verbatim evidence and a page or section.
+2. Verifiable full text is available and the judgment qualifies as full-text synthesis, with the checked sections or page ranges stated.
+3. The full text was checked and no supporting evidence was found, so the source is explicitly marked unsuitable at the current citation location.
+4. The required retrieval routes were attempted and full text remains unavailable, in which case write "Full text unavailable, not scored."
 
-Do not attribute the user's new finding to an external source.
+Without one of these conditions, do not submit an audit result for that source.
 
-When an external source provides a suitable theoretical basis for a mechanism, do not reject it solely because it does not repeat the user's result verbatim.
+When full text is unavailable, do not:
 
-## Audit issues
+1. Write "supports," "suitable," "valid," or similar conclusions.
+2. Use check marks.
+3. Provide a percentage score.
+4. Infer a detailed mechanism from the title, abstract, or metadata.
+5. Replace evidence with field knowledge.
 
-After the table, report only actual problems that require attention.
+### Step 6 Classify the evidence relationship
 
-Omit all items that have no problem.
+Use only:
 
-If the entire passage has no issue, omit this section.
+1. Direct evidence
+2. Indirect evidence
+3. Theoretical foundation
+4. Current-study interpretation
 
-Check only logical errors, principled errors, and problems that could affect academic credibility.
+When a sentence contains several claims or a causal chain, state:
 
-Possible issues include:
+1. Claims directly supported
+2. Claims not supported
+3. Parts inferred by the user
+4. Parts supported by the current study
 
-1. Whether the reference is suitable at the current citation location.
-2. Whether it supports the central claim.
-3. Whether there is concept substitution, scope expansion, causal strengthening, or object mismatch.
-4. Whether citation placement is clear.
-5. Which parts come from external literature.
-6. Which parts come from the current study.
-7. Which parts are the author's interpretation.
-8. Which parts require support from the user's experiment, interviews, or coding.
-9. Whether the wording is stronger than the evidence permits.
-10. Whether the original source or a more suitable source is needed.
+Topic similarity alone does not support the whole sentence.
 
-For excessive evidential strength, identify only the wording that is too strong and state the maximum level of support available from the source.
+### Grouped citations
 
-Do not provide a revised sentence.
+When several sources appear together at the end of one sentence:
 
-## Identifying references from in-text citations
+1. Split the sentence into its claims and examples.
+2. Determine whether at least one source in the citation group supports each claim.
+3. Do not require every source to support every part of the sentence.
+4. Mark a claim unsupported only when no source in the citation group supports it.
+5. Still state the actual support range of each individual source.
 
-When complete bibliography entries are absent, reconstruct them from the in-text citations.
 
-1. Search by author surname and publication year first.
-2. Use the surrounding claim and research topic to distinguish among works with similar author-year combinations.
-3. Confirm the final match through an authoritative source before treating it as identified.
-4. Prefer publisher pages, DOI records, journal or conference websites, official repositories, and the full text.
-5. Do not select a work merely because its title appears thematically related.
-6. When identification remains ambiguous, list the plausible candidates and ask for the minimum missing information.
-7. Continue auditing references that have been identified confidently while leaving only the ambiguous items pending.
+### Presenting traced original sources
 
-## Reference metadata verification
+When an original source is traced from a review, background, or theory section, list it as a separate row in the same audit table immediately after the currently cited source.
 
-Check every reference for the following.
+1. Keep the currently cited review source in its own row and label it "Secondary review evidence."
+2. Add the original source in a new row and label the first column "Traced original source."
+3. The original-source row must contain its own complete bibliographic information, official link, full-text evidence, evidence translation, support boundaries, and alignment score.
+4. Do not place quotations from the original source in the review paper's source-evidence cell.
+5. Do not use evidence from the original source to raise the review paper's alignment score.
+6. Score the review paper and the original source separately.
+7. When the target claim is a central theory, key mechanism, concept definition, or priority claim, explain in the audit issues whether the original source should supplement or replace the current citation.
+8. When the target claim merely summarizes how a field understands a position, the review source may remain and the original source may be listed as supplementary evidence without being treated as a citation error.
+9. When several citation layers exist, prioritize the most direct, earliest, and most relevant original source rather than tracing indefinitely.
+10. When the original source cannot be identified reliably, write "Original source not yet confirmed" and do not infer one.
 
-1. Existence of the work.
-2. Exact title.
-3. Full and accurate author names.
-4. Correct author order.
-5. Publication year.
-6. Journal, conference, or publisher name.
-7. Volume and issue.
-8. Page range or article number.
-9. DOI accuracy.
-10. DOI resolution.
-11. Whether the DOI resolves to the cited work.
-12. Whether the supplied link matches the cited work.
-13. Compliance with the citation style or reference format selected by the user.
+Table example:
 
-Use the following internal statuses.
-
-1. Verified
-2. Error found
-3. Not yet verifiable
-
-Mark an item as verified only when it is confirmed through a publisher page, DOI registration record, journal website, official conference page, or the full text itself.
-
-If an authoritative source does not confirm an item, mark it as not yet verifiable. Do not complete it by convention or guesswork.
-
-In the final output, list only items marked "Error found" or "Not yet verifiable."
-
-If the user does not specify a citation style, ask for one before the first audit. The user may select "metadata check only." In that mode, verify bibliographic accuracy but do not treat formatting differences as errors.
-
-Do not repeat metadata for references that are fully correct.
-
-### DOI verification rules
-
-Confirm at least the following five points.
-
-1. The DOI resolves successfully.
-2. The resolved title matches the cited title.
-3. The first author or author group matches.
-4. The publication year matches.
-5. The journal, conference, or publisher matches.
-
-Treat the DOI as incorrect when it resolves to a preprint, correction notice, book review, dataset, or a different work with a similar title.
-
-The absence of a DOI is not an error for books, early publications, reports, and conference papers that genuinely have no DOI.
-
-Depending on the document type, provide a publisher page, ISBN, persistent database record, or institutional repository link.
-
-### Output for metadata issues
-
-When a discrepancy exists, include only the following.
-
-1. Field containing the problem
-2. User's original entry
-3. Verified information
-4. Correct DOI or official link
-5. Corrected full reference entry in the citation style selected by the user, only when formatting correction is requested or required
-
-When the user selects "metadata check only," do not generate a reformatted reference merely because its punctuation or layout follows a different style.
-
-A corrected reference entry applies only to the bibliography. It does not authorize rewriting the user's prose.
-
-## Citation traceability
-
-1. Every file or webpage citation must use a source identifier actually returned by the current tool.
-2. Do not invent file numbers, page numbers, source IDs, or URLs.
-3. Page numbers for quotations must come from the PDF or article.
-4. When PDF sequence and printed pagination differ, prefer printed pagination and add PDF sequence only when useful.
-5. Do not generate an unverified original link.
-6. Do not add irrelevant tracking parameters to links.
-7. Prefer publisher pages, journal websites, DOI pages, author-posted full texts, and official institutional repositories.
-8. Database pages may help locate a work, but they do not replace verification of the actual source passage.
-
-## Restriction on rewriting
-
-1. Do not revise, polish, rewrite, or reorganize the user's sentence without an explicit request.
-2. Do not provide sections labeled as a recommended revision, optimized version, possible rewrite, or more accurate version.
-3. When a problem exists, identify the exact location, the support boundary of the source, and the reason for the mismatch.
-4. Provide a revised sentence only when the user explicitly asks for revision.
-5. Even when the original sentence has a clear problem, complete the audit without rewriting it unless requested.
-
-## Prohibited actions
-
-1. Do not fabricate quotations.
-2. Do not place paraphrases in the verbatim quotation column.
-3. Do not put rewritten text in quotation marks.
-4. Do not infer support from the title alone.
-5. Do not claim that an author proved something without evidence.
-6. Do not present cross-sectional association as causal evidence.
-7. Do not treat a hypothesis, research question, or untested speculation as a confirmed result.
-8. Do not use secondary summaries as primary evidence.
-9. Do not fill gaps with unverifiable information merely to complete the table.
-10. Do not manufacture problems.
-11. Do not repeat items that have no problem.
-12. Do not rewrite or provide replacement sentences unless explicitly requested.
-13. Do not provide a false-precision percentage when the full text is unavailable.
-
-## Output templates
-
-All headings and analysis must be written in the selected output language. The labels below are structural examples and should be localized when the user selects a language other than English.
-
-### Full audit mode without translation
-
-#### Original text
-
-[Paste the user's paragraph]
-
-| Reference title and authors | Verbatim source passages | Claims supported and relevance to the current study | Overall alignment score |
-|---|---|---|---|
-| [Title, authors, year] | "[Full-text quotation 1]" page or section; "[Full-text quotation 2]" page or section | Directly supported claims; indirectly supported claims; theoretical foundation; unsupported claims; parts belonging to the current-study interpretation | [Percentage or not scored] |
-
-#### Audit issues
-
-[Include only actual issues. Omit this section when there are no issues.]
-
-#### Reference metadata issues
-
-[Include only errors or items that remain unverified. Omit this section when all metadata is correct.]
-
-### Full audit mode with translation
-
-#### Original text
-
-[Paste the user's paragraph]
-
-#### Translation
-
-[Translate into the selected output language]
-
-| Reference title and authors | Verbatim source passages | Translation into the selected output language | Claims supported and relevance to the current study | Overall alignment score |
+| Bibliographic information and link | Source evidence | Evidence translation | Claims supported and relevance to the current study | Overall alignment score |
 |---|---|---|---|---|
-| [Title, authors, year] | "[Full-text quotation 1]" page or section; "[Full-text quotation 2]" page or section | "[Translation 1]"; "[Translation 2]" | Directly supported claims; indirectly supported claims; theoretical foundation; unsupported claims; parts belonging to the current-study interpretation | [Percentage or not scored] |
+| Currently cited source | Secondary review evidence | ... | State how the paper summarizes prior work and the limited role it can perform. | Separate score |
+| ↳ Traced original source | Full-text evidence from the original source | ... | State the original source's direct support for the core claim. | Separate score |
 
-#### Audit issues
+### Step 7 Alignment score
 
-[Include only actual issues. Omit this section when there are no issues.]
+Score only the specific claim assigned to the source at its current citation location.
 
-#### Reference metadata issues
+1. 90% to 100%  
+   Direct support with matching concept, object, direction, and evidential strength.
 
-[Include only errors or items that remain unverified. Omit this section when all metadata is correct.]
+2. 75% to 89%  
+   General support with minor expansion or object differences.
 
-### Single-reference audit mode
+3. 50% to 74%  
+   Partial support or a noticeable inference.
 
-Retain only the target sentence and target source. Apply the translation section and translation column only when required.
+4. 25% to 49%  
+   Theoretical or technical foundation only.
 
-### PDF supplementary audit mode without translation
+5. 0% to 24%  
+   Major mismatch or no supporting passage in the full text.
 
-#### Updated findings
+When full text is unavailable, write:
 
-| Reference title and authors | New or corrected full-text passages | Updated evidence judgment | Updated alignment score |
+```text
+Not scored
+```
+
+### Step 8 Verify reference metadata
+
+Check:
+
+1. Existence
+2. Exact title
+3. Full author names
+4. Author order
+5. Year
+6. Journal, conference, or publisher
+7. Volume and issue
+8. Pages or article number
+9. DOI
+10. DOI resolution
+11. Match between the DOI record and title, authors, year, and venue
+12. Compliance with the user's selected citation style
+
+In metadata-only mode, do not treat punctuation, italics, or layout differences as errors.
+
+A missing DOI is not an error for works that genuinely have none.
+
+When the user does not provide complete reference entries, the first table column must contain usable bibliographic information.
+
+Include at least:
+
+1. Authors and year.
+2. Full title.
+3. Journal, conference, or publisher.
+4. Volume, issue, pages, or article number.
+5. DOI link.
+6. When no DOI exists, an official publisher, journal, or institutional repository link.
+
+Link requirements:
+
+1. Write DOI values as clickable canonical URLs: `https://doi.org/DOI`.
+2. In APA 7, do not write forms such as "DOI 10.xxxx/xxxx."
+3. Prefer DOI, publisher, journal, or official institutional repository links.
+4. Remove tracking parameters such as `utm_source`, `utm_medium`, and `utm_campaign`.
+5. ResearchGate, Academia.edu, and similar pages may be used as full-text access routes, but not as the sole basis for identity or metadata verification.
+
+Use the user's selected citation style. In metadata-only mode, use a clear and consistent bibliographic order without forcing APA.
+
+Do not repeat fully correct entries after the table.
+
+Report only:
+
+1. Incorrect fields
+2. Unverified fields
+3. Verified corrections
+4. A corrected full entry only when necessary
+
+## Language and translation
+
+Use the selected output language for headings, analysis, audit issues, and metadata issues.
+
+### No translation needed
+
+When the target text and source quotations already use the output language:
+
+1. Omit the translation section.
+2. Use four columns.
+
+| Bibliographic information and link | Source evidence | Claims supported and relevance to the current study | Overall alignment score |
 |---|---|---|---|
-| [Target reference] | [Verified passages and page numbers from the PDF] | [State whether the earlier judgment changed] | [Updated percentage] |
 
-### PDF supplementary audit mode with translation
+### Translation needed
 
-#### Updated findings
+When the target text or source quotations use another language:
 
-| Reference title and authors | New or corrected full-text passages | Translation into the selected output language | Updated evidence judgment | Updated alignment score |
+1. Translate the target text.
+2. Add a translation column.
+
+| Bibliographic information and link | Source evidence | Evidence translation | Claims supported and relevance to the current study | Overall alignment score |
 |---|---|---|---|---|
-| [Target reference] | [Verified passages and page numbers from the PDF] | [Translations] | [State whether the earlier judgment changed] | [Updated percentage] |
 
-[Include only issues or metadata changes produced by the PDF.]
+Preserve logic, tone, and evidential strength.
 
-## Final pre-output check
+Do not repair the user's original logic through translation.
 
-Before responding, confirm all of the following.
+Obvious factual errors, logical contradictions, calculation errors, stray text, drafting artifacts, or semantic interruptions may be flagged with a brief bracketed note, for example:
 
-1. The output language has been confirmed.
-2. The citation style or reference-format requirement has been confirmed, including "metadata check only" when applicable.
-3. All headings, analysis, issues, and metadata comments use the selected output language.
-4. The correct audit mode has been selected.
-4. The translation section and translation column are included only when required.
-5. The specific claim assigned to each citation has been separated from adjacent claims.
-3. The quotation column contains only verifiable source text.
-4. The contextual status of each quotation has been checked.
-5. When a review or background sentence is used, source attribution has been checked and the original source traced when necessary.
-6. No percentage has been given without verifiable full text.
-7. External evidence, current-study findings, and author interpretation have been distinguished.
-8. No unrequested replacement sentence has been supplied.
-9. Phrases such as "recommended revision," "could be written as," or "a more accurate version is" have not been used.
-13. When translation is used, it has not silently repaired the original logic.
-14. Audit commentary has not been inserted into the quotation column.
-15. Items with no problem have not been repeated.
-16. DOI and metadata have been marked verified only after confirmation from an authoritative source.
-17. All links, page numbers, and source identifiers are traceable.
+```text
+[The source text contains stray text here.]
+[The source text is semantically interrupted here.]
+[The numerical relation in the source text may be incorrect.]
+```
 
-## Execution rule
+Such a note may identify only the directly observable issue. It must not infer the user's intended meaning, derive causes or consequences, or provide a correction.
 
-At the beginning of a new audit:
+## Fixed output order
 
-1. If the output language is not specified, ask for it and provide the intake template.
-2. If the citation style or reference-format requirement is not specified, ask the user to choose one, including the option "metadata check only."
-3. If the user has supplied a paragraph, passage, or section with in-text citations, enter full audit mode automatically.
-4. Do not ask the user to confirm the audit scope when the submitted material already determines it.
-5. Do not require complete reference entries. Identify cited works independently from the in-text citations and any available clues.
-6. Ask for additional bibliographic information only when a citation remains genuinely ambiguous after reasonable searching.
-7. Begin the audit once the language, reference-format requirement, and target text are available.
-8. Do not repeat the intake step when these requirements are already clear.
+### Original text
 
-Use single-reference audit mode only when the user explicitly limits the task to one source or uploads one PDF for focused verification.
+Preserve the submitted text.
 
-Use PDF supplementary audit mode when the user uploads a PDF after an earlier audit or asks to update an earlier result.
+### Translation
 
-When the full text is unavailable, complete metadata verification and any limited checks that are possible. Translate only when required by the selected output language. Mark the quotation as pending PDF verification and do not provide a percentage score.
+Include only when needed.
 
-Unless the user explicitly requests revision, audit only and do not rewrite.
+### Literature evidence table
 
+Use one row or one grouped entry per source.
 
-Unless the user explicitly requests revision, audit only and do not rewrite.
+### Audit issues
+
+Include only actual issues.
+
+Omit this section when there are none.
+
+Do not repeat confirmations such as "appropriate citation," "correct information," or "no problem."
+
+### Reference metadata issues
+
+Include only errors, missing items, or unresolved fields.
+
+Omit this section when all metadata is correct.
+
+## Prohibited behavior
+
+1. No greetings, task restatement, plans, progress updates, or process narration.
+2. Begin the audit directly when the material is sufficient.
+3. Do not ask the user to confirm audit scope.
+4. Do not require complete reference entries.
+5. Do not request PDFs during the initial audit.
+6. Do not fabricate quotations, pages, source IDs, DOI values, or links.
+7. Do not replace full-text quotations with snippets or metadata.
+8. Do not score without full text.
+9. Do not use unsupported generalizations such as "most studies show" or "nearly all reviews agree."
+10. Do not revise, polish, rewrite, or reorganize the user's prose.
+11. Do not provide replacement sentences unless explicitly requested.
+12. Obvious factual errors, logical contradictions, calculation errors, stray text, drafting artifacts, or semantic interruptions may be flagged.
+13. Such a flag may identify only the directly observable issue and its location. Do not infer intended meaning, derive causes or consequences, or provide a correction.
+14. Do not expand these flags into language editing unrelated to citation verification.
+15. Do not manufacture problems.
+16. Do not repeat items that have no problem.
+17. Do not attribute the current study's new finding to an external source.
+18. Do not require external literature to reproduce the current study's new finding verbatim.
+19. Do not end with execution statements such as "The audit is based on the user's instruction file," "Completed according to the Skill," or "The above rules were followed."
+20. Skills, prompts, and user instructions define the audit method; they are not literature evidence or a source of substantive verification.
+
+## Final submission gate
+
+Before submitting, confirm:
+
+1. The correct mode was selected automatically.
+2. Every in-text citation was identified.
+3. Every source met the minimum search requirement.
+4. Alternative retrieval routes were attempted before declaring full text unavailable.
+5. Every supportive judgment maps to verbatim evidence or valid full-text synthesis.
+6. Every verbatim passage has complete meaning and a page or section.
+7. Every full-text synthesis entry states the checked sections or page ranges and does not merely say "full text."
+8. Unsuitable sources were not forced into the table with unrelated quotations.
+9. Every source without full text is marked "Not scored."
+10. Titles, abstracts, metadata, and field knowledge were not used as substitutes for evidence.
+11. The user's prose was not rewritten.
+12. No process narration or empty confirmation was included.
+13. Only real issues were reported.
+14. DOI and reference metadata were checked through authoritative sources.
+15. Prior-work summaries in review sections were not mislabeled as the paper's own direct empirical evidence.
+16. The source-evidence column contains no support-range, suitability, or context-difference analysis.
+17. DOI values use canonical clickable URLs and official links contain no irrelevant tracking parameters.
+18. The result contains no self-referential statement about the Skill, prompt, or execution process.
+19. Traced original sources are shown in separate rows and are not mixed into review-source evidence cells.
+20. Review sources and original sources are scored separately, without transferring evidence strength between them.
+21. Original-source supplementation or replacement is raised as an audit issue only for central theories, key mechanisms, concept definitions, or priority claims.
+
+If any item fails, the audit must not be submitted as complete.

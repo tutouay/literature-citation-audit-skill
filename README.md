@@ -15,7 +15,7 @@ A reusable skill for checking whether academic references actually support the c
 5. The AI will search for and verify the cited sources first.
 6. Upload a PDF only when the AI cannot access or verify the full text.
 
-Version 6.1 supports adaptive language output and user-selected citation styles.
+Version 6.2 supports adaptive language output and user-selected citation styles.
 
 - English material with English output uses no translation section and a four-column evidence table.
 - Material in another language is translated into the selected output language.
@@ -47,7 +47,7 @@ The two skill files contain equivalent audit logic. Install one language version
 5. AI/Agent将首先搜索并验证引用的来源。
 6. 仅在AI/Agent无法访问或验证全文时为AI提供PDF格式的文献资料。
 
-v6.1 支持动态语言输出和用户自定义参考文献格式。
+v6.2 支持动态语言输出和用户自定义参考文献格式。
 
 - 英语材料使用英语输出时，不设置翻译部分，核查表使用四列。
 - 材料语言与输出语言不同时，翻译成用户选择的语言。

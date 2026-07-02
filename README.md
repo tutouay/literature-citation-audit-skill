@@ -6,7 +6,7 @@
 
 A reusable skill for checking whether academic references actually support the claims assigned to them.
 
-## Quick Start
+## ‼️ Quick Start
 
 1. Choose `SKILL.md` or `SKILL.zh-CN.md`.
 2. Add the selected file to your AI tool's instruction or skill environment.
@@ -38,7 +38,7 @@ The two skill files contain equivalent audit logic. Install one language version
 
 用于核查学术文献是否真实存在，以及文献原文能否支持当前引文位置承担的具体命题。
 
-## 迅速开始
+## ‼️ 迅速开始
 
 1. 选择 `SKILL.md` 或者 `SKILL.zh-CN.md`。
 2. 将选定的文件添加到您的AI/Agent工具的指令或技能环境中。

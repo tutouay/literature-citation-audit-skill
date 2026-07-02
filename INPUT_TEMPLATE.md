@@ -88,6 +88,7 @@ Passage I intended to cite:
 "[Paste the source sentence or paragraph here.]"
 ```
 PDF files are not required for the initial audit. Upload them only when the AI cannot access or verify the full text.
+
 The supplied passage helps locate the relevant context. It will still be checked against the source itself.
 
 ## Ready-to-send form

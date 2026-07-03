@@ -21,7 +21,8 @@ Example:
 ```text
 I love learning very much, and it brings me joy (XXX, 2026).
 ```
-4. Send the message and wait for the audit result.
+4. Send the message, AI will provide feedback on the required language output and reference format preferences.
+5. Wait for the output result.
    
 > ‼️ To improve processing speed, you may also provide the corresponding reference entries, with or without links.
 Example:
@@ -95,7 +96,8 @@ v7 根据实际测试中暴露的问题重新设计。
 ```text
 I love learning very much, and it brings me joy(xxx.,2026).
 ```
-4. 发送 - 等待
+4. 发送后，AI会反馈需要什么语言输出和参考文献格式偏好
+5. 回答，等待输出结果
    
 ‼️. 想提高速度可以把带或不带链接的参考文献一并提交
 ```text
